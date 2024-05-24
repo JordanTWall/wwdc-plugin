@@ -1,0 +1,268 @@
+#checkout-button {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  z-index: 1200;
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  #checkout-button {
+    display: block; /* Show on mobile */
+  }
+}
+
+.service-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 4px;
+  background-color: #f0ffff;
+  border: 1px solid #ffb100;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.service-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.service-title-text {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.service-title-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 6px;
+  transition: all 0.7s ease;
+}
+
+.service-image {
+  width: 22% !important;
+  height: auto !important;
+  margin-right: 4px !important;
+  margin-left: 10px !important;
+  margin-bottom: 8px !important;
+  border: 1px solid black !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+}
+
+.slider-container {
+  width: 68%;
+  display: flex;
+  flex-direction: column;
+  padding-left: 4px;
+  align-items: center;
+}
+.selector-display {
+  width: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-chevron {
+  background-color: #ffb100;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 5px;
+  margin-left: 20px;
+  transition: background-color 0.3s, transform 0.5s;
+  transform: rotate(180deg); /* Added */
+}
+
+.chevron,
+.chevron-container {
+  user-select: none; /* Prevent text selection */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+/* Change background color on hover */
+.custom-chevron:hover {
+  background-color: lightgreen;
+}
+
+.service-title:not(.expanded) .custom-chevron {
+  transform: none;
+}
+.service-title.expanded .chevron {
+  transform: rotate(180deg);
+}
+.service-title.expanded + .service-title-body {
+  display: flex;
+}
+
+service-title.text-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Calculator  */
+
+.calculator-container {
+  background-color: #f0ffff;
+  border: 1px solid #ffb100;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.checkout-logo-countainer {
+  max-width: 200px;
+  height: auto;
+}
+.checkout-logo {
+  width: 200px;
+  height: auto;
+}
+
+.checkout-title-text {
+  margin-bottom: 0px;
+}
+.custom-col {
+  padding: 6px;
+}
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.service-col {
+  display: flex;
+  align-items: start;
+}
+.quote-col {
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+}
+.calc-row {
+  padding-top: 4px;
+  justify-content: space-between;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.subtotal-calc-row {
+  padding-top: 4px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.checkout-title-text {
+  padding-top: 10px;
+  justify-content: space-between;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.service-subtotals {
+  border-top: solid 1px #ffb100;
+  padding-bottom: 10px;
+}
+
+.discount-code-input {
+  margin-top: 10px;
+  margin-bottom: 6px;
+  padding-right: 4px;
+  padding-left: 4px;
+}
+
+.discount-code-button {
+  margin-bottom: 10px;
+  border-bottom: solid 1px black;
+}
+.subtotals-calculator {
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  background-color: azure;
+}
+.btns {
+  width: 200px;
+  margin-top: 4px;
+  border-radius: 12px;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#bookNowBtn {
+  color: black;
+  background-color: #fac02d;
+  border-color: black;
+}
+
+#bookNowBtn:hover {
+  background-color: #ffb100;
+}
+
+.calendly-container-container {
+  min-height: 800px;
+}
+#calendly-container {
+  display: none;
+  min-height: 800px;
+}
+
+/* Add a CSS class for the sticky behavior */
+.sticky-calculator {
+  position: sticky;
+  top: 10px; /* Adjust the top position as needed */
+  float: right; /* Float it to the right */
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+@media (max-width: 768px) {
+  #checkout-button {
+    display: none;
+  }
+}
+/* Apply the sticky behavior on tablets and larger screens */
+@media (min-width: 768px) {
+  .calculator-container {
+    flex: 0 0 40%; /* Adjust the width as needed */
+    max-width: 40%; /* Limit the maximum width */
+  }
+  .sticky-calculator {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 10px; /* Adjust the top position as needed */
+    float: none; /* Remove float on larger screens */
+    margin-right: 0; /* Remove margin on larger screens */
+  }
+}
+
+.discount-code-alerts {
+  font-size: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+#invalid-code {
+  display: none;
+  color: red;
+  padding-left: 26px;
+}
+#discount-applied {
+  display: none;
+  color: green;
+  padding-left: 26px;
+}
+
+#select-services {
+  color: red;
+  padding-left: 26px;
+}
