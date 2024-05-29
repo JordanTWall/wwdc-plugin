@@ -21,6 +21,8 @@ define('WWDC_PLUGIN_URL', plugin_dir_url(__FILE__));
 // Include additional PHP files
 require_once(WWDC_PLUGIN_PATH . 'includes/shortcode.php');
 
+include(plugin_dir_path(__FILE__) . 'includes/functions.php');
+
 // Enqueue scripts and styles
 function wwdc_enqueue_assets()
 {
@@ -44,7 +46,6 @@ function wwdc_enqueue_assets()
     // Plugin JavaScript files
 
     wp_enqueue_script_module('wwdc-data-script', plugin_dir_url(__FILE__) . 'assets/js/utils/data.js');
-    wp_enqueue_script_module('wwdc-utils-script', plugin_dir_url(__FILE__) . 'assets/js/utils/utils.js');
     wp_enqueue_script_module('wwdc-calculator-script', plugin_dir_url(__FILE__) . 'assets/js/scripts/calculator.js');
     wp_enqueue_script_module('wwdc-data-manager-script', plugin_dir_url(__FILE__) . 'assets/js/scripts/dataManager.js');
     wp_enqueue_script_module('wwdc-display-controller-script', plugin_dir_url(__FILE__) . 'assets/js/scripts/displayController.js', ['jquery', 'wwdc-data-script', 'wwdc-calculator-script', 'wdc-utils-script']);

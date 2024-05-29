@@ -1,6 +1,7 @@
 import { applyDiscount } from './calculator.js'
-import { selectServices } from './main.js'
 import { getUuids } from './dataManager.js'
+import { calendlyLink } from '../utils/data.js'
+import { selectServicesErrorMsg } from './displayController.js'
 
 export function discountBtnHandler() {
   const discountBtn = document.getElementById('discountBtn')
@@ -43,6 +44,7 @@ export function calendlyHandler() {
 
 export function bookNowBtnHandler() {
   const bookNowBtn = document.getElementById('bookNowBtn')
+
   if (bookNowBtn) {
     bookNowBtn.addEventListener('click', () => {
       const totalValue =
@@ -52,15 +54,14 @@ export function bookNowBtnHandler() {
 
       // Check if total is greater than 0
       if (totalValue > 0) {
-        // Hide 'please select services'
-        if (selectServices) {
-          selectServices.style.display = 'none'
+        if (selectServicesErrorMsg) {
+          selectServicesErrorMsg.style.display = 'none'
         }
 
         try {
-          // Init Calendly popup widget
+          // Init Calendly popup widget+
           Calendly.initPopupWidget({
-            url: 'https://calendly.com/jordanwall_insurancebroker/clean-pristine-carpet-cleaning?hide_gdpr_banner=1;',
+            url: `${calendlyLink}?hide_gdpr_banner=1;`,
           })
         } catch (error) {
           console.error('An error occurred while initializing Calendly:', error)
@@ -70,11 +71,24 @@ export function bookNowBtnHandler() {
 
         return false
       } else {
-        // Display 'please select services'
-        if (selectServices) {
-          selectServices.style.display = 'block'
+        if (selectServicesErrorMsg) {
+          selectServicesErrorMsg.style.display = 'block'
         }
       }
     })
   }
+}
+
+export function initEmail() {
+  emailjs.init({
+    publicKey: '92WGB_-QLtXqknE71',
+    // Do not allow headless browsers
+    blockHeadless: true,
+    limitRate: {
+      // Set the limit rate for the application
+      id: 'app',
+      // Allow 1 request per 10s
+      throttle: 10000,
+    },
+  })
 }

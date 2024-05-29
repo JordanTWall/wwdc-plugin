@@ -1,22 +1,19 @@
-import { initEmail } from '../utils/utils.js'
-
 import {
   renderServices,
-  mobileCheckOutButtonDisplay,
+  mobileCheckOutButtonController,
 } from './displayController.js'
 
 import {
   bookNowBtnHandler,
   discountBtnHandler,
   calendlyHandler,
+  initEmail,
 } from './handlers.js'
-
-export const selectServices = document.getElementById('select-services')
 
 //Initialize Modules
 initEmail()
 
-mobileCheckOutButtonDisplay()
+mobileCheckOutButtonController()
 
 renderServices()
 

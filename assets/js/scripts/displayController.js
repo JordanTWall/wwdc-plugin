@@ -1,6 +1,38 @@
 import { services } from '../utils/data.js'
-import { hideEmptyCartAlert, hideUnusedRows } from '../utils/utils.js'
 import { updateSliderValue } from './calculator.js'
+
+export const selectServicesErrorMsg = document.getElementById('select-services')
+
+export function hideEmptyCartAlert() {
+  const totalDiv = document.getElementById('total')
+
+  if (totalDiv) {
+    // Get the content of the div and remove the dollar sign
+    const totalText = totalDiv.textContent.replace('$', '')
+
+    // Parse the content as a float
+    const totalValue = parseFloat(totalText)
+
+    // Check if the value is greater than 0
+    if (totalValue > 0) {
+      // If selectServices exists, hide it
+      if (selectServicesErrorMsg) {
+        selectServicesErrorMsg.style.display = 'none'
+      }
+    }
+  }
+}
+
+export function hideUnusedRows() {
+  document.querySelectorAll('.calc-row').forEach(function (row) {
+    row.style.display = 'none'
+  })
+
+  if (selectServicesErrorMsg) {
+    selectServicesErrorMsg.style.setProperty('display', 'none', 'important')
+  }
+  hideEmptyCartAlert()
+}
 
 export function renderServices() {
   const servicesContainer = jQuery('#services-selector-container')
@@ -116,8 +148,7 @@ export function toggleDropdown(selectorId, chevronElement) {
   serviceTitle.classList.toggle('expanded') // Toggle the 'expanded' class
 }
 
-//shows checkoutbutton on bottom left corner until viewport reaches calculator on mobile
-export function mobileCheckOutButtonDisplay() {
+export function mobileCheckOutButtonController() {
   window.addEventListener('scroll', function () {
     const serviceSelectorContainer = document.getElementById(
       'services-selector-container'
