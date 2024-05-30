@@ -20,45 +20,48 @@ define('WWDC_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 // Include additional PHP files
 require_once(WWDC_PLUGIN_PATH . 'includes/shortcode.php');
+require_once(WWDC_PLUGIN_PATH . 'includes/functions.php');
+require_once(WWDC_PLUGIN_PATH . 'admin/admin-page.php');
 
-include(plugin_dir_path(__FILE__) . 'includes/functions.php');
+// Add admin menu
+function my_plugin_add_admin_menu()
+{
+    add_menu_page('Service Manager', 'Service Manager', 'manage_options', 'service-manager', 'my_plugin_admin_page');
+}
+add_action('admin_menu', 'my_plugin_add_admin_menu');
 
-// Enqueue scripts and styles
+// Enqueue admin scripts
+function my_plugin_enqueue_admin_scripts($hook)
+{
+    if ($hook != 'toplevel_page_service-manager') {
+        return;
+    }
+    wp_enqueue_script('admin-scripts', WWDC_PLUGIN_URL . 'admin/admin-scripts.js', array('jquery'), null, true);
+    wp_localize_script('admin-scripts', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+}
+add_action('admin_enqueue_scripts', 'my_plugin_enqueue_admin_scripts');
+
+// Enqueue frontend scripts and styles
 function wwdc_enqueue_assets()
 {
-    // Enqueue styles
-    wp_enqueue_style('wwdc-style', plugin_dir_url(__FILE__) . 'assets/css/style.css');
-
-
-
-    // Third-party assets
+    wp_enqueue_style('wwdc-style', WWDC_PLUGIN_URL . 'assets/css/style.css');
     wp_enqueue_style('bootstrap-css', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
     wp_enqueue_style('calendly-css', 'https://calendly.com/assets/external/widget.css');
 
     wp_enqueue_script('jquery');
+    wp_enqueue_script('popper-js', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', array(), null, true);
+    wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', array('jquery', 'popper-js'), null, true);
+    wp_enqueue_script('calendly-widget', 'https://calendly.com/assets/external/widget.js', array(), null, true);
 
-    // Enqueue scripts
-    wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', ['jquery', 'popper-js'], null, true);
-    wp_enqueue_script('popper-js', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', [], null, true);
-    wp_enqueue_script('calendly-widget', 'https://calendly.com/assets/external/widget.js', [], null, true);
+    wp_enqueue_script_module('wwdc-data-script', WWDC_PLUGIN_URL . 'assets/js/utils/data.js');
+    wp_enqueue_script_module('wwdc-calculator-script', WWDC_PLUGIN_URL . 'assets/js/scripts/calculator.js');
+    wp_enqueue_script_module('wwdc-data-manager-script', WWDC_PLUGIN_URL . 'assets/js/scripts/dataManager.js');
+    wp_enqueue_script_module('wwdc-display-controller-script', WWDC_PLUGIN_URL . 'assets/js/scripts/displayController.js', array('jquery', 'wwdc-data-script', 'wwdc-calculator-script'));
+    wp_enqueue_script_module('wwdc-handlers-script', WWDC_PLUGIN_URL . 'assets/js/scripts/handlers.js', array('wwdc-data-manager-script', 'wwdc-calculator-script', 'calendly-widget'));
+    wp_enqueue_script_module('wwdc-main-script', WWDC_PLUGIN_URL . 'assets/js/scripts/main.js', array('jquery', 'wwdc-display-controller-script', 'wwdc-handlers-script'));
 
-    // Plugin JavaScript files
-
-    wp_enqueue_script_module('wwdc-data-script', plugin_dir_url(__FILE__) . 'assets/js/utils/data.js');
-    wp_enqueue_script_module('wwdc-calculator-script', plugin_dir_url(__FILE__) . 'assets/js/scripts/calculator.js');
-    wp_enqueue_script_module('wwdc-data-manager-script', plugin_dir_url(__FILE__) . 'assets/js/scripts/dataManager.js');
-    wp_enqueue_script_module('wwdc-display-controller-script', plugin_dir_url(__FILE__) . 'assets/js/scripts/displayController.js', ['jquery', 'wwdc-data-script', 'wwdc-calculator-script', 'wdc-utils-script']);
-    wp_enqueue_script_module('wwdc-handlers-script', plugin_dir_url(__FILE__) . 'assets/js/scripts/handlers.js', ['wwdc-data-manager-script', 'wwdc-calculator-script', 'calendly-widget']);
-    wp_enqueue_script_module('wwdc-main-script', plugin_dir_url(__FILE__) . 'assets/js/scripts/main.js', ['jquery', 'wwdc-utils-script', 'wwdc-display-controller-script', 'wwdc-handlers-script']);
-
-
-
-
-    // Enqueue emailjs script
-    wp_enqueue_script('emailjs', 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js', [], null, true);
-
-    // Enqueue the inline script that depends on emailjs
+    wp_enqueue_script('emailjs', 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js', array(), null, true);
     wp_add_inline_script('emailjs', '
         (function() {
             emailjs.init({
