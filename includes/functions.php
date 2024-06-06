@@ -140,7 +140,7 @@ function get_services_data()
                 'servicePage' => get_post_meta($service_id, 'servicePage', true),
                 'rootName' => get_post_meta($service_id, 'rootName', true),
                 'serviceTitleText' => get_the_title(),
-                'imageUrl' => get_the_post_thumbnail_url($service_id, 'full'),
+                'imageUrl' => get_the_post_thumbnail_url($service_id, 'medium'),
                 'imageAlt' => get_post_meta($service_id, '_wp_attachment_image_alt', true),
                 'maxValue' => get_post_meta($service_id, 'maxValue', true),
                 'sliderPrice' => get_post_meta($service_id, 'sliderPrice', true),

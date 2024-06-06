@@ -1,4 +1,3 @@
-import { services } from '../utils/data.js'
 import { updateSliderValue } from './calculator.js'
 
 export const selectServicesErrorMsg = document.getElementById('select-services')
@@ -34,7 +33,7 @@ export function hideUnusedRows() {
   hideEmptyCartAlert()
 }
 
-export function renderServices() {
+export function renderServices(services) {
   const servicesContainer = jQuery('#services-selector-container')
   const serviceSubtotalContainer = jQuery('#service-subtotal-container')
 

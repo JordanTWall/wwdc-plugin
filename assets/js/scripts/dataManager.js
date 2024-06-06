@@ -101,3 +101,19 @@ export function getUuids(eventUri, inviteeUri) {
   console.log(`The invitee UUID is ${inviteeUuid}`)
   sendQuoteInfo(eventUuid, inviteeUuid)
 }
+
+export async function fetchServices() {
+  try {
+    const response = await fetch(
+      '/wp-json/wall-web-dev-calendly-integration-plugin/v1/services'
+    )
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+    const services = await response.json()
+    return services
+  } catch (error) {
+    console.error('Error fetching services:', error)
+    return []
+  }
+}
