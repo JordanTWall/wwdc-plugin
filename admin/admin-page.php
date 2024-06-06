@@ -16,11 +16,20 @@ function my_plugin_admin_page()
                     <td><input type="text" name="service-root-name" id="service-root-name" class="regular-text" maxlength="40" required /></td>
                 </tr>
                 <tr>
-                    <th scope="row" id="service-image-th"><label for="service-image">Service Image</label></th>
+                    <th scope="row" id="service-image-th"><label for="service-image">Service Image<br> <span class="regular text" style="font-size: x-small">Upload Square Images Only</span></label></th>
                     <td><input type="file" name="service-image" id="service-image" required /></td>
                 </tr>
                 <tr>
-                    <th scope="row" id="service-max-value-th"><label for="service-max-value">Max Value</label></th>
+                    <th scope="row" id="service-img-alt-th">
+                        <label for="service-img-alt">Short Image Description <br>
+                            <span class="regular text" style="font-size: x-small">For ADA Compliance and SEO</span>
+                        </label>
+                    </th>
+                    <td><input type="text" name="service-img-alt" id="service-img-alt" class="regular-text" maxlength="80" required /></td>
+                </tr>
+
+                <tr>
+                    <th scope="row" id="service-max-value-th"><label for="service-max-value">Slider Max Value</label></th>
                     <td><input type="number" name="service-max-value" id="service-max-value" class="regular-text" required /></td>
                 </tr>
                 <tr>

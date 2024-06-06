@@ -10,6 +10,7 @@ function my_plugin_add_service()
     $root_name = sanitize_text_field($_POST['service-root-name']);
     $max_value = intval($_POST['service-max-value']);
     $slider_price = floatval($_POST['service-slider-price']);
+    $img_alt = sanitize_text_field($_POST['service-img-alt']);
 
     // Handle file upload
     if (!function_exists('wp_handle_upload')) {
@@ -29,6 +30,21 @@ function my_plugin_add_service()
             return;
         }
 
+        // Determine service order
+        $service_page = 'carpetCleaningPage';
+        $args = array(
+            'post_type' => 'service',
+            'meta_query' => array(
+                array(
+                    'key' => 'servicePage',
+                    'value' => $service_page,
+                    'compare' => '='
+                )
+            )
+        );
+        $query = new WP_Query($args);
+        $service_order = $query->found_posts;
+
         // Create a new post of type 'service'
         $post_id = wp_insert_post(array(
             'post_title' => $title,
@@ -37,11 +53,14 @@ function my_plugin_add_service()
         ));
 
         // Save custom fields
+
+        update_post_meta($post_id, 'servicePage', 'carpetCleaningPage');
         update_post_meta($post_id, 'rootName', $root_name);
         update_post_meta($post_id, 'imageUrl', wp_get_attachment_url($attachment_id));
-        update_post_meta($post_id, 'imageAlt', get_post_meta($attachment_id, '_wp_attachment_image_alt', true));
+        update_post_meta($post_id, 'imageAlt', $img_alt);
         update_post_meta($post_id, 'maxValue', $max_value);
         update_post_meta($post_id, 'sliderPrice', $slider_price);
+        update_post_meta($post_id, 'serviceOrder', $service_order);
 
         wp_send_json_success('Service added successfully.');
     } else {
@@ -103,25 +122,39 @@ function custom_insert_attachment($file)
 }
 
 // Fetch services from custom post type
-function get_services()
+function get_services_data()
 {
     $args = array(
         'post_type' => 'service',
         'posts_per_page' => -1,
     );
+
     $query = new WP_Query($args);
     $services = array();
-    while ($query->have_posts()) {
-        $query->the_post();
-        $services[] = array(
-            'rootName' => get_post_meta(get_the_ID(), 'rootName', true),
-            'serviceTitleText' => get_the_title(),
-            'imageUrl' => get_the_post_thumbnail_url(),
-            'imageAlt' => get_post_meta(get_the_ID(), 'imageAlt', true),
-            'maxValue' => get_post_meta(get_the_ID(), 'maxValue', true),
-            'sliderPrice' => get_post_meta(get_the_ID(), 'sliderPrice', true),
-        );
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $service_id = get_the_ID();
+            $services[] = array(
+                'servicePage' => get_post_meta($service_id, 'servicePage', true),
+                'rootName' => get_post_meta($service_id, 'rootName', true),
+                'serviceTitleText' => get_the_title(),
+                'imageUrl' => get_the_post_thumbnail_url($service_id, 'full'),
+                'imageAlt' => get_post_meta($service_id, '_wp_attachment_image_alt', true),
+                'maxValue' => get_post_meta($service_id, 'maxValue', true),
+                'sliderPrice' => get_post_meta($service_id, 'sliderPrice', true),
+            );
+        }
+        wp_reset_postdata();
     }
-    wp_reset_postdata();
-    return $services;
+
+    return new WP_REST_Response($services, 200);
 }
+
+add_action('rest_api_init', function () {
+    register_rest_route('wall-web-dev-calendly-integration-plugin/v1', '/services', array(
+        'methods' => 'GET',
+        'callback' => 'get_services_data',
+    ));
+});

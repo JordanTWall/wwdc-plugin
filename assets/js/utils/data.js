@@ -15,7 +15,7 @@ export const services = [
     serviceTitleText: 'Finished Basement',
     imageUrl:
       'https://cleanandpristinesvcinc.com/wp-content/uploads/2023/12/finishedbasement-scaled.webp',
-    imageAlt: 'Living Room',
+    imageAlt: 'A Finished Basement',
     maxValue: 4,
     sliderPrice: 79,
   },
