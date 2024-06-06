@@ -20,6 +20,7 @@ mobileCheckOutButtonController()
 fetchServices().then((services) => {
   if (services.length > 0) {
     renderServices(services) // Call renderServices with the fetched services
+    console.log(services)
   } else {
     console.error('No services found.')
   }

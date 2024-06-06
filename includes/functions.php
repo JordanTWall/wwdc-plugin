@@ -136,14 +136,18 @@ function get_services_data()
         while ($query->have_posts()) {
             $query->the_post();
             $service_id = get_the_ID();
+            // $imageUrl = get_the_post_thumbnail_url($service_id, 'medium');
+            // error_log("Service ID: $service_id, ImageURL: $imageUrl");
+
             $services[] = array(
                 'servicePage' => get_post_meta($service_id, 'servicePage', true),
                 'rootName' => get_post_meta($service_id, 'rootName', true),
                 'serviceTitleText' => get_the_title(),
-                'imageUrl' => get_the_post_thumbnail_url($service_id, 'medium'),
-                'imageAlt' => get_post_meta($service_id, '_wp_attachment_image_alt', true),
+                'imageUrl' => get_post_meta($service_id, 'imageUrl', true),
+                'imageAlt' => get_post_meta($service_id, 'imageAlt', true),
                 'maxValue' => get_post_meta($service_id, 'maxValue', true),
                 'sliderPrice' => get_post_meta($service_id, 'sliderPrice', true),
+
             );
         }
         wp_reset_postdata();
