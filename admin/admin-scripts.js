@@ -1,6 +1,5 @@
-// admin-scripts.js
-
 jQuery(document).ready(function ($) {
+  // Handle Form Submission
   $('#custom-image-upload-form').on('submit', function (e) {
     e.preventDefault()
 
@@ -10,6 +9,7 @@ jQuery(document).ready(function ($) {
     // Reset all th colors
     $('th').css('color', '')
 
+    // Error Handling For Post
     let serviceTitle = $('#service-title').val()
     if (!serviceTitle || serviceTitle.length > 80) {
       $('#service-title-th').css('color', 'red')
@@ -62,6 +62,11 @@ jQuery(document).ready(function ($) {
       alert('Please fill in all required fields correctly.')
       return
     }
+
+    $('#save-service-changes-btn').on('click', function (e) {
+      e.preventDefault()
+      saveEditedService()
+    })
 
     let formData = new FormData(this)
     formData.append('action', 'my_plugin_add_service')
@@ -133,18 +138,17 @@ jQuery(document).ready(function ($) {
                 service.id +
                 '">&darr;</button>'
               : ''
-          } 
+          }
+          <button class="delete-service" data-id="${service.id}">Delete</button>
         </div>
       `)
       servicesList.append(serviceDiv)
-      const deleteButton = $('<button>')
-        .addClass('delete-service')
-        .text('Delete')
-        .data('id', service.id)
-      serviceDiv.append(deleteButton)
+    })
 
-      // Delete service button click
-      $(document).on('click', '.delete-service', function () {
+    // Event delegation for dynamically added delete buttons
+    $(document)
+      .off('click', '.delete-service')
+      .on('click', '.delete-service', function () {
         const serviceId = $(this).data('id')
         if (
           confirm(
@@ -169,8 +173,6 @@ jQuery(document).ready(function ($) {
           })
         }
       })
-    })
-    // Add this in the renderServices function where other buttons are appended
   }
 
   // Save service order button click
@@ -193,10 +195,6 @@ jQuery(document).ready(function ($) {
         if (response.success) {
           alert('Service order saved successfully!')
           loadServices()
-          const selectedServiceId = $('#edit-service-id').val()
-          if (selectedServiceId) {
-            saveEditedService()
-          }
         } else {
           alert('Error: ' + response.data)
         }
@@ -223,6 +221,13 @@ jQuery(document).ready(function ($) {
           $('#edit-service-max-value').val(service.maxValue)
           $('#edit-service-slider-price').val(service.sliderPrice)
           $('#edit-service-img-alt').val(service.imageAlt)
+
+          if (service.imageUrl) {
+            $('#edit-service-image').data(
+              'existing-image-url',
+              service.imageUrl
+            )
+          }
           $('#editServiceModal').show()
         } else {
           alert('Error: ' + response.data)
@@ -238,6 +243,12 @@ jQuery(document).ready(function ($) {
   function saveEditedService() {
     const formData = new FormData($('#edit-service-form')[0])
     formData.append('action', 'my_plugin_edit_service')
+    formData.append('security', ajax_object.ajax_nonce) // Add the nonce
+    const existingImageUrl = $('#edit-service-image').data('existing-image-url')
+    if (existingImageUrl && !$('#edit-service-image')[0].files[0]) {
+      formData.append('existing-image-url', existingImageUrl)
+    }
+
     $.ajax({
       url: ajax_object.ajax_url,
       type: 'POST',
@@ -259,18 +270,27 @@ jQuery(document).ready(function ($) {
     })
   }
 
+  $('#edit-service-form').on('submit', function (e) {
+    e.preventDefault()
+    saveEditedService()
+  })
+
   // Move service up
   $(document).on('click', '.move-up', function () {
     const serviceId = $(this).data('id')
-    // Implement the logic to move the service up in order
     changeServiceOrder(serviceId, 'up')
   })
 
   // Move service down
   $(document).on('click', '.move-down', function () {
     const serviceId = $(this).data('id')
-    // Implement the logic to move the service down in order
     changeServiceOrder(serviceId, 'down')
+  })
+
+  $('#save-service-changes-btn').on('click', function (e) {
+    e.preventDefault()
+    saveEditedService()
+    console.log("i'm pressing the damn button")
   })
 
   function changeServiceOrder(serviceId, direction) {

@@ -37,7 +37,7 @@ function my_plugin_enqueue_admin_scripts($hook)
         return;
     }
     wp_enqueue_script('admin-scripts', WWDC_PLUGIN_URL . 'admin/admin-scripts.js', array('jquery'), null, true);
-    wp_localize_script('admin-scripts', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+    wp_localize_script('admin-scripts', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('my_plugin_nonce')));
 }
 add_action('admin_enqueue_scripts', 'my_plugin_enqueue_admin_scripts');
 
