@@ -23,6 +23,13 @@ require_once(WWDC_PLUGIN_PATH . 'includes/shortcode.php');
 require_once(WWDC_PLUGIN_PATH . 'includes/functions.php');
 require_once(WWDC_PLUGIN_PATH . 'admin/admin-page.php');
 
+
+function my_plugin_enqueue_admin_styles()
+{
+    wp_enqueue_style('my-plugin-admin-styles', plugins_url('admin/admin-styles.css', __FILE__));
+}
+add_action('admin_enqueue_scripts', 'my_plugin_enqueue_admin_styles');
+
 // Add admin menu
 function my_plugin_add_admin_menu()
 {
@@ -30,12 +37,16 @@ function my_plugin_add_admin_menu()
 }
 add_action('admin_menu', 'my_plugin_add_admin_menu');
 
+
+
+
 // Enqueue admin scripts
 function my_plugin_enqueue_admin_scripts($hook)
 {
     if ($hook != 'toplevel_page_service-manager') {
         return;
     }
+    wp_enqueue_script('jquery-ui-sortable');
     wp_enqueue_script('admin-scripts', WWDC_PLUGIN_URL . 'admin/admin-scripts.js', array('jquery'), null, true);
     wp_localize_script('admin-scripts', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('my_plugin_nonce')));
 }

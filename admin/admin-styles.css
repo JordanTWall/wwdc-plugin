@@ -1,0 +1,52 @@
+.service-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  background: #f9f9f9;
+  cursor: move;
+}
+
+.service-title {
+  margin-bottom: 10px;
+}
+
+.service-content {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin-bottom: 10px;
+}
+
+.service-image {
+  margin-right: 20px;
+  margin-left: 10px;
+  height: 100px;
+  width: 100px;
+  border-radius: 10px;
+  border: 1px solid grey;
+}
+#save-service-changes-btn {
+  margin-top: 10px;
+}
+.edit-svc-div {
+  display: flex;
+  align-items: flex-start;
+}
+
+.col {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.services-list {
+  width: 500px;
+  list-stype-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#edit-service-container {
+  flex: 1;
+  margin-top: 10px;
+}

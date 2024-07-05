@@ -129,6 +129,9 @@ function get_services_data()
     $args = array(
         'post_type' => 'service',
         'posts_per_page' => -1,
+        'meta_key' => 'serviceOrder',
+        'orderby' => 'meta_value_num',
+        'order' => 'ASC',
     );
 
     $query = new WP_Query($args);
@@ -139,7 +142,6 @@ function get_services_data()
             $query->the_post();
             $service_id = get_the_ID();
 
-
             $services[] = array(
                 'servicePage' => get_post_meta($service_id, 'servicePage', true),
                 'rootName' => get_post_meta($service_id, 'rootName', true),
@@ -149,7 +151,6 @@ function get_services_data()
                 'maxValue' => get_post_meta($service_id, 'maxValue', true),
                 'sliderPrice' => get_post_meta($service_id, 'sliderPrice', true),
                 'serviceOrder' => get_post_meta($service_id, 'serviceOrder', true),
-
             );
         }
         wp_reset_postdata();
@@ -157,6 +158,7 @@ function get_services_data()
 
     return new WP_REST_Response($services, 200);
 }
+
 
 add_action('rest_api_init', function () {
     register_rest_route('wall-web-dev-calendly-integration-plugin/v1', '/services', array(
@@ -233,6 +235,8 @@ if (!function_exists('custom_insert_attachment')) {
         return $attachment_id;
     }
 }
+
+
 
 function my_plugin_edit_service()
 {
