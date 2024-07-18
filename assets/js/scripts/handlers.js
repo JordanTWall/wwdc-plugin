@@ -1,5 +1,4 @@
 import { applyDiscount } from './calculator.js'
-import { getUuids } from './dataManager.js'
 import { calendlyLink } from '../utils/data.js'
 import { selectServicesErrorMsg } from './displayController.js'
 
@@ -25,7 +24,7 @@ export function calendlyHandler() {
     return e.data.event && e.data.event.indexOf('calendly') === 0
   }
 
-//Booking Event Listener
+  //Booking Event Listener
   window.addEventListener('message', function (e) {
     if (isCalendlyEvent(e)) {
       const { payload } = e.data
@@ -36,13 +35,14 @@ export function calendlyHandler() {
           const { uri: inviteeUri } = invitee
           console.log(eventUri, inviteeUri)
           // fbq('track', 'Schedule')
-          getUuids(eventUri, inviteeUri)
+          const eventUuid = eventUri.split('/scheduled_events/')[1]
+          const inviteeUuid = inviteeUri.split('/invitees/')[1]
+          sendQuoteInfo(eventUuid, inviteeUuid)
         }
       }
     }
   })
 }
-
 
 export function bookNowBtnHandler() {
   const bookNowBtn = document.getElementById('bookNowBtn')

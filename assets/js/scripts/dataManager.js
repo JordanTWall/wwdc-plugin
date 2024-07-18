@@ -28,13 +28,13 @@ export function getServiceData() {
 
 export async function sendQuoteInfo(eventUuid, inviteeUuid) {
   const server = 'http://localhost:8080'
-  const apiRoute = '/'
+  const apiRoute = '/api'
 
   const getValue = (id) =>
     parseFloat(document.getElementById(id).textContent.replace('$', ''))
 
   const discountCodeElement = document.getElementById('discountCodeInput')
-  const discountCodeValue = discountCodeElement ? discountCodeElement.value : ''
+  const discountCodeValue = discountCodeElement.value.trim()
 
   const data = {
     ...getServiceData(),
@@ -42,57 +42,51 @@ export async function sendQuoteInfo(eventUuid, inviteeUuid) {
     taxes: getValue('taxes'),
     savings: getValue('savings'),
     total: getValue('total'),
-    discountCodeInput: discountCodeValue ? '' : discountCodeValue,
+    discountCodeInput: discountCodeValue,
     eventUuid,
     inviteeUuid,
   }
-  console.log(data)
 
-  const templateParams = {
-    data: JSON.stringify(data),
-  }
+  const queryString = new URLSearchParams(data).toString()
+  console.log(`Request query string: ${queryString}`)
 
   try {
-    const emailResponse = await emailjs.send(
-      'service_b0hdp8b',
-      'template_uhtnijl',
-      templateParams
-    )
-
-    console.log(
-      'Email sent successfully!',
-      emailResponse.status,
-      emailResponse.text
-    )
-  } catch (emailError) {
-    console.error('Failed to send email...', emailError)
-  }
-
-  try {
-    const response = await fetch(`${server}${apiRoute}`, {
-      method: 'POST',
+    const response = await fetch(`${server}${apiRoute}?${queryString}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
     })
 
     if (!response.ok) {
       throw new Error('Network response was not ok')
     }
 
-    const responseData = await response.json()
-    console.log('Data sent successfully:', responseData)
+    const emailBody = await response.text()
+    console.log('Data received successfully:', emailBody)
+
+    const templateParams = {
+      data: emailBody,
+    }
+
+    try {
+      const emailResponse = await emailjs.send(
+        'service_b0hdp8b',
+        'template_uhtnijl',
+        templateParams
+      )
+
+      console.log(
+        'Email sent successfully!',
+        emailResponse.status,
+        emailResponse.text
+      )
+    } catch (emailError) {
+      console.error('Failed to send email...', emailError)
+    }
   } catch (fetchError) {
     console.error('Error sending data:', fetchError)
   }
-}
-
-//gets client and event IDs from calendly.
-export function getUuids(eventUri, inviteeUri) {
-  const eventUuid = eventUri.split('/scheduled_events/')[1]
-  const inviteeUuid = inviteeUri.split('/invitees/')[1]
-  sendQuoteInfo(eventUuid, inviteeUuid)
 }
 
 export async function fetchServices() {
