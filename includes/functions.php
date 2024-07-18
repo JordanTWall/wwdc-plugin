@@ -123,7 +123,7 @@ function custom_insert_attachment($file)
     return $attachment_id;
 }
 
-// Fetch services from custom post type
+// Fetch services by serviceOrder
 function get_services_data()
 {
     $args = array(

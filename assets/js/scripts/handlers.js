@@ -25,6 +25,7 @@ export function calendlyHandler() {
     return e.data.event && e.data.event.indexOf('calendly') === 0
   }
 
+//Booking Event Listener
   window.addEventListener('message', function (e) {
     if (isCalendlyEvent(e)) {
       const { payload } = e.data
@@ -41,6 +42,7 @@ export function calendlyHandler() {
     }
   })
 }
+
 
 export function bookNowBtnHandler() {
   const bookNowBtn = document.getElementById('bookNowBtn')

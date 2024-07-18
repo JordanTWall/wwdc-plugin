@@ -245,8 +245,6 @@ jQuery(document).ready(function ($) {
       `)
       servicesList.append(serviceDiv)
     })
-
-    // Initialize sortable
     servicesList.sortable({})
   }
 

@@ -27,30 +27,26 @@ export function getServiceData() {
 }
 
 export async function sendQuoteInfo(eventUuid, inviteeUuid) {
-  const server = 'https://138.197.124.77:8080'
+  const server = 'http://localhost:8080'
+  const apiRoute = '/'
+
+  const getValue = (id) =>
+    parseFloat(document.getElementById(id).textContent.replace('$', ''))
+
+  const discountCodeElement = document.getElementById('discountCodeInput')
+  const discountCodeValue = discountCodeElement ? discountCodeElement.value : ''
 
   const data = {
     ...getServiceData(),
-    subtotal: parseFloat(
-      document.getElementById('subtotal').textContent.replace('$', '')
-    ),
-
-    taxes: parseFloat(
-      document.getElementById('taxes').textContent.replace('$', '')
-    ),
-
-    savings: parseFloat(
-      document.getElementById('savings').textContent.replace('$', '')
-    ),
-
-    total: parseFloat(
-      document.getElementById('total').textContent.replace('$', '')
-    ),
-
-    discountCodeInput: validDiscountCode,
+    subtotal: getValue('subtotal'),
+    taxes: getValue('taxes'),
+    savings: getValue('savings'),
+    total: getValue('total'),
+    discountCodeInput: discountCodeValue ? '' : discountCodeValue,
     eventUuid,
     inviteeUuid,
   }
+  console.log(data)
 
   const templateParams = {
     data: JSON.stringify(data),
@@ -73,7 +69,7 @@ export async function sendQuoteInfo(eventUuid, inviteeUuid) {
   }
 
   try {
-    const response = await fetch(`${server}/api/auth`, {
+    const response = await fetch(`${server}${apiRoute}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -96,9 +92,6 @@ export async function sendQuoteInfo(eventUuid, inviteeUuid) {
 export function getUuids(eventUri, inviteeUri) {
   const eventUuid = eventUri.split('/scheduled_events/')[1]
   const inviteeUuid = inviteeUri.split('/invitees/')[1]
-
-  console.log(`The event UUID is ${eventUuid}`)
-  console.log(`The invitee UUID is ${inviteeUuid}`)
   sendQuoteInfo(eventUuid, inviteeUuid)
 }
 
