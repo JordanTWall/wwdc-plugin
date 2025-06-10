@@ -46,9 +46,26 @@ function my_plugin_enqueue_admin_scripts($hook)
     if ($hook != 'toplevel_page_service-manager') {
         return;
     }
+
+    // Enqueue necessary scripts
     wp_enqueue_script('jquery-ui-sortable');
-    wp_enqueue_script('admin-scripts', WWDC_PLUGIN_URL . 'admin/admin-scripts.js', array('jquery'), null, true);
-    wp_localize_script('admin-scripts', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php'), 'ajax_nonce' => wp_create_nonce('my_plugin_nonce')));
+    wp_enqueue_script(
+        'admin-scripts',
+        WWDC_PLUGIN_URL . 'admin/admin-scripts.js',
+        array('jquery'),
+        null,
+        true
+    );
+
+    // Localize script with AJAX URL and nonce
+    wp_localize_script(
+        'admin-scripts',
+        'ajax_object',
+        array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'ajax_nonce' => wp_create_nonce('custom_image_upload'), // Ensure this matches 'custom_image_upload' in check_ajax_referer
+        )
+    );
 }
 add_action('admin_enqueue_scripts', 'my_plugin_enqueue_admin_scripts');
 

@@ -1,70 +1,61 @@
 jQuery(document).ready(function ($) {
   // Handle New Service Form Submission
   $('#custom-image-upload-form').on('submit', function (e) {
-    e.preventDefault()
+    e.preventDefault();
 
     // Validate fields and highlight empty ones
-    let isValid = true
+    let isValid = true;
 
     // Reset all th colors
-    $('th').css('color', '')
+    $('th').css('color', '');
 
     // Error Handling For Post
-    let serviceTitle = $('#service-title').val()
+    let serviceTitle = $('#service-title').val();
     if (!serviceTitle || serviceTitle.length > 80) {
-      $('#service-title-th').css('color', 'red')
-      isValid = false
+      $('#service-title-th').css('color', 'red');
+      isValid = false;
     }
 
-    let serviceRootName = $('#service-root-name').val()
-    let rootNameRegex = /^[a-zA-Z0-9]+$/
-    if (
-      !serviceRootName ||
-      serviceRootName.length > 40 ||
-      !rootNameRegex.test(serviceRootName)
-    ) {
-      $('#service-root-name-th').css('color', 'red')
-      isValid = false
+    let serviceRootName = $('#service-root-name').val();
+    let rootNameRegex = /^[a-zA-Z0-9]+$/;
+    if (!serviceRootName || serviceRootName.length > 40 || !rootNameRegex.test(serviceRootName)) {
+      $('#service-root-name-th').css('color', 'red');
+      isValid = false;
     }
 
-    let serviceImage = $('#service-image')[0].files[0]
+    let serviceImage = $('#service-image')[0].files[0];
     if (!serviceImage) {
-      $('#service-image-th').css('color', 'red')
-      isValid = false
+      $('#service-image-th').css('color', 'red');
+      isValid = false;
     } else {
-      const fileType = serviceImage.type
-      const validImageTypes = [
-        'image/jpeg',
-        'image/png',
-        'image/gif',
-        'image/webp',
-      ]
+      const fileType = serviceImage.type;
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
       if (!validImageTypes.includes(fileType)) {
-        alert('Only JPG, PNG, WEBP and GIF files are allowed.')
-        $('#service-image-th').css('color', 'red')
-        isValid = false
+        alert('Only JPG, PNG, WEBP, and GIF files are allowed.');
+        $('#service-image-th').css('color', 'red');
+        isValid = false;
       }
     }
 
-    let serviceMaxValue = $('#service-max-value').val()
+    let serviceMaxValue = $('#service-max-value').val();
     if (!serviceMaxValue) {
-      $('#service-max-value-th').css('color', 'red')
-      isValid = false
+      $('#service-max-value-th').css('color', 'red');
+      isValid = false;
     }
 
-    let serviceSliderPrice = $('#service-slider-price').val()
+    let serviceSliderPrice = $('#service-slider-price').val();
     if (!serviceSliderPrice) {
-      $('#service-slider-price-th').css('color', 'red')
-      isValid = false
+      $('#service-slider-price-th').css('color', 'red');
+      isValid = false;
     }
 
     if (!isValid) {
-      alert('Please fill in all required fields correctly.')
-      return
+      alert('Please fill in all required fields correctly.');
+      return;
     }
 
-    let formData = new FormData(this)
-    formData.append('action', 'my_plugin_add_service')
+    let formData = new FormData(this);
+    formData.append('action', 'my_plugin_add_service');
 
     $.ajax({
       url: ajax_object.ajax_url,
@@ -74,86 +65,77 @@ jQuery(document).ready(function ($) {
       contentType: false,
       success: function (response) {
         if (response.success) {
-          alert('Service added successfully!')
-          loadServices()
+          alert('Service added successfully!');
+          loadServices();
         } else {
-          alert('Error: ' + response.data)
+          alert('Error: ' + response.data);
         }
       },
       error: function (error) {
-        console.log('Error: ', error)
+        console.log('Error: ', error);
       },
-    })
-  })
+    });
+  });
 
   // Handle Edit Service Form Submission
   $('#edit-service-form').on('submit', function (e) {
-    e.preventDefault()
+    e.preventDefault();
 
     // Validate fields and highlight empty ones
-    let isValid = true
+    let isValid = true;
 
     // Reset all the colors
-    $('th').css('color', '')
+    $('th').css('color', '');
 
     // Error Handling For Post
-    let serviceTitle = $('#edit-service-title').val()
+    let serviceTitle = $('#edit-service-title').val();
     if (!serviceTitle || serviceTitle.length > 80) {
-      $('#edit-service-title-th').css('color', 'red')
-      isValid = false
+      $('#edit-service-title-th').css('color', 'red');
+      isValid = false;
     }
 
-    let serviceRootName = $('#edit-service-root-name').val()
-    let rootNameRegex = /^[a-zA-Z0-9]+$/
-    if (
-      !serviceRootName ||
-      serviceRootName.length > 40 ||
-      !rootNameRegex.test(serviceRootName)
-    ) {
-      $('#edit-service-root-name-th').css('color', 'red')
-      isValid = false
+    let serviceRootName = $('#edit-service-root-name').val();
+    let rootNameRegex = /^[a-zA-Z0-9]+$/;
+    if (!serviceRootName || serviceRootName.length > 40 || !rootNameRegex.test(serviceRootName)) {
+      $('#edit-service-root-name-th').css('color', 'red');
+      isValid = false;
     }
 
-    let serviceImage = $('#edit-service-image')[0].files[0]
+    let serviceImage = $('#edit-service-image')[0].files[0];
     if (serviceImage) {
-      const fileType = serviceImage.type
-      const validImageTypes = [
-        'image/jpeg',
-        'image/png',
-        'image/gif',
-        'image/webp',
-      ]
+      const fileType = serviceImage.type;
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
       if (!validImageTypes.includes(fileType)) {
-        alert('Only JPG, PNG, WEBP and GIF files are allowed.')
-        $('#edit-service-image-th').css('color', 'red')
-        isValid = false
+        alert('Only JPG, PNG, WEBP, and GIF files are allowed.');
+        $('#edit-service-image-th').css('color', 'red');
+        isValid = false;
       }
     }
 
-    let serviceMaxValue = $('#edit-service-max-value').val()
+    let serviceMaxValue = $('#edit-service-max-value').val();
     if (!serviceMaxValue) {
-      $('#edit-service-max-value-th').css('color', 'red')
-      isValid = false
+      $('#edit-service-max-value-th').css('color', 'red');
+      isValid = false;
     }
 
-    let serviceSliderPrice = $('#edit-service-slider-price').val()
+    let serviceSliderPrice = $('#edit-service-slider-price').val();
     if (!serviceSliderPrice) {
-      $('#edit-service-slider-price-th').css('color', 'red')
-      isValid = false
+      $('#edit-service-slider-price-th').css('color', 'red');
+      isValid = false;
     }
 
     if (!isValid) {
-      alert('Please fill in all required fields correctly.')
-      return
+      alert('Please fill in all required fields correctly.');
+      return;
     }
 
-    const formData = new FormData(this)
-    formData.append('action', 'my_plugin_edit_service')
-    formData.append('security', ajax_object.ajax_nonce) // Add the nonce
+    const formData = new FormData(this);
+    formData.append('action', 'my_plugin_edit_service');
+    formData.append('security', ajax_object.ajax_nonce); // Add the nonce
 
-    const existingImageUrl = $('#edit-service-image').data('existing-image-url')
+    const existingImageUrl = $('#edit-service-image').data('existing-image-url');
     if (existingImageUrl && !$('#edit-service-image')[0].files[0]) {
-      formData.append('existing-image-url', existingImageUrl)
+      formData.append('existing-image-url', existingImageUrl);
     }
 
     $.ajax({
@@ -164,20 +146,70 @@ jQuery(document).ready(function ($) {
       contentType: false,
       success: function (response) {
         if (response.success) {
-          alert('Service updated successfully!')
-          $('#edit-service-container').hide()
-          loadServices()
+          alert('Service updated successfully!');
+          $('#edit-service-container').hide();
+          loadServices();
         } else {
-          alert('Error: ' + response.data)
+          alert('Error: ' + response.data);
         }
       },
       error: function (error) {
-        console.log('Error: ', error)
+        console.log('Error: ', error);
       },
-    })
-  })
+    });
+  });
 
-  let initialOrder = []
+  // Load Setup Values (Calendly Link and Server Endpoint)
+  function loadSetupValues() {
+    $.ajax({
+      url: ajax_object.ajax_url,
+      type: 'POST',
+      data: { action: 'my_plugin_get_settings' },
+      success: function (response) {
+        if (response.success) {
+          $('#calendly-link').val(response.data.calendly_link || '');
+          $('#server-endpoint').val(response.data.server_endpoint || '');
+        }
+      },
+      error: function (error) {
+        console.error('Error fetching setup values:', error);
+      },
+    });
+  }
+  loadSetupValues();
+
+  // handle delete service button
+  $(document).on('click', '.delete-service', function () {
+    if (!confirm('Are you sure you want to delete this service?')) {
+      return;
+    }
+
+    const serviceId = $(this).data('id');
+
+    $.ajax({
+      url: ajax_object.ajax_url,
+      type: 'POST',
+      data: {
+        action: 'my_plugin_delete_service',
+        id: serviceId,
+        security: ajax_object.ajax_nonce, // Include the nonce
+      },
+      success: function (response) {
+        if (response.success) {
+          alert('Service deleted successfully!');
+          loadServices(); // Reload the list of services
+        } else {
+          alert('Error: ' + response.data);
+        }
+      },
+      error: function (error) {
+        console.log('Error: ', error);
+        alert('An error occurred while trying to delete the service.');
+      },
+    });
+  });
+
+  let initialOrder = [];
 
   function loadServices() {
     $.ajax({
@@ -186,76 +218,76 @@ jQuery(document).ready(function ($) {
       data: { action: 'my_plugin_get_services' },
       success: function (response) {
         if (response.success) {
-          renderServices(response.data)
-          storeInitialOrder()
+          renderServices(response.data);
+          storeInitialOrder();
         } else {
-          alert('Error: ' + response.data)
+          alert('Error: ' + response.data);
         }
       },
       error: function (error) {
-        console.log('Error: ', error)
+        console.log('Error: ', error);
       },
-    })
+    });
   }
 
   function storeInitialOrder() {
-    initialOrder = []
+    initialOrder = [];
     $('.service-item').each(function (index) {
-      initialOrder.push($(this).data('id'))
-    })
+      initialOrder.push($(this).data('id'));
+    });
   }
 
   function getCurrentOrder() {
-    const currentOrder = []
+    const currentOrder = [];
     $('.service-item').each(function (index) {
-      currentOrder.push($(this).data('id'))
-    })
-    return currentOrder
+      currentOrder.push($(this).data('id'));
+    });
+    return currentOrder;
   }
 
   function hasOrderChanged() {
-    const currentOrder = getCurrentOrder()
+    const currentOrder = getCurrentOrder();
     if (initialOrder.length !== currentOrder.length) {
-      return true
+      return true;
     }
     for (let i = 0; i < initialOrder.length; i++) {
       if (initialOrder[i] !== currentOrder[i]) {
-        return true
+        return true;
       }
     }
-    return false
+    return false;
   }
 
   // Render services
   function renderServices(services) {
-    const servicesList = $('#services-list')
-    servicesList.empty()
+    const servicesList = $('#services-list');
+    servicesList.empty();
     services.forEach((service) => {
       const serviceDiv = $(`
-        <div class="service-item" data-id="${service.id}">
-            <h3 class="service-title">${service.serviceTitleText}</h3>
-            <div class="service-content">
-                <img src="${service.imageUrl}" alt="${service.imageAlt}" class="service-image" />
-                <div class="service-buttons">
-                    <button class="view-edit-service edit-svc-btn button button-secondary" data-id="${service.id}">View/Edit Service</button>
-                    <button class="delete-service button button-secondary" data-id="${service.id}">Delete</button>
+            <div class="service-item" data-id="${service.id}">
+                <h3 class="service-title">${service.serviceTitleText}</h3>
+                <div class="service-content">
+                    <img src="${service.imageUrl}" alt="${service.imageAlt}" class="service-image" />
+                    <div class="service-buttons">
+                        <button class="view-edit-service edit-svc-btn button button-secondary" data-id="${service.id}">View/Edit Service</button>
+                        <button class="delete-service button button-secondary" data-id="${service.id}">Delete</button>
+                    </div>
                 </div>
             </div>
-        </div>
-      `)
-      servicesList.append(serviceDiv)
-    })
-    servicesList.sortable({})
+        `);
+      servicesList.append(serviceDiv);
+    });
+    servicesList.sortable({});
   }
 
   function saveServiceOrder() {
-    const serviceOrder = []
+    const serviceOrder = [];
     $('.service-item').each(function (index) {
       serviceOrder.push({
         id: $(this).data('id'),
         order: index + 1,
-      })
-    })
+      });
+    });
     $.ajax({
       url: ajax_object.ajax_url,
       type: 'POST',
@@ -265,36 +297,36 @@ jQuery(document).ready(function ($) {
       },
       success: function (response) {
         if (response.success) {
-          alert('Service order saved successfully!')
-          loadServices()
+          alert('Service order saved successfully!');
+          loadServices();
         } else {
-          alert('Error: ' + response.data)
+          alert('Error: ' + response.data);
         }
       },
       error: function (error) {
-        console.log('Error: ', error)
+        console.log('Error: ', error);
       },
-    })
+    });
   }
 
   // Save Service Order Handler
   $('#save-service-order').on('click', function () {
     if (hasOrderChanged()) {
-      saveServiceOrder()
+      saveServiceOrder();
     } else {
-      alert('Order has not changed.')
+      alert('Order has not changed.');
     }
-  })
+  });
 
   function saveEditedService() {
-    const formData = new FormData($('#edit-service-form')[0])
-    formData.append('action', 'my_plugin_edit_service')
-    formData.append('security', ajax_object.ajax_nonce) // Add the nonce
-    const existingImageUrl = $('#edit-service-image').data('existing-image-url')
+    const formData = new FormData($('#edit-service-form')[0]);
+    formData.append('action', 'my_plugin_edit_service');
+    formData.append('security', ajax_object.ajax_nonce); // Add the nonce
+    const existingImageUrl = $('#edit-service-image').data('existing-image-url');
     if (existingImageUrl && !$('#edit-service-image')[0].files[0]) {
-      formData.append('existing-image-url', existingImageUrl)
+      formData.append('existing-image-url', existingImageUrl);
     }
-    saveServiceOrder()
+    saveServiceOrder();
     $.ajax({
       url: ajax_object.ajax_url,
       type: 'POST',
@@ -303,64 +335,61 @@ jQuery(document).ready(function ($) {
       contentType: false,
       success: function (response) {
         if (response.success) {
-          alert('Service updated successfully!')
-          $('#edit-service-container').hide()
-          loadServices()
+          alert('Service updated successfully!');
+          $('#edit-service-container').hide();
+          loadServices();
         } else {
-          alert('Error: ' + response.data)
+          alert('Error: ' + response.data);
         }
       },
       error: function (error) {
-        console.log('Error: ', error)
+        console.log('Error: ', error);
       },
-    })
+    });
   }
 
-  //Edit Serive Btn Handler
+  //Edit Service Btn Handler
   $('#edit-service-form').on('submit', function (e) {
-    e.preventDefault()
-    saveEditedService()
-  })
+    e.preventDefault();
+    saveEditedService();
+  });
 
   //Save Service Btn Handler
   $('#save-service-changes-btn').on('click', function (e) {
-    e.preventDefault()
-    saveEditedService()
-  })
+    e.preventDefault();
+    saveEditedService();
+  });
 
   //Render Edit Service Section
   $(document).on('click', '.view-edit-service', function () {
-    const serviceId = $(this).data('id')
+    const serviceId = $(this).data('id');
     $.ajax({
       url: ajax_object.ajax_url,
       type: 'POST',
       data: { action: 'my_plugin_get_service', id: serviceId },
       success: function (response) {
         if (response.success) {
-          const service = response.data
-          $('#edit-service-id').val(service.id)
-          $('#edit-service-title').val(service.serviceTitleText)
-          $('#edit-service-root-name').val(service.rootName)
-          $('#edit-service-max-value').val(service.maxValue)
-          $('#edit-service-slider-price').val(service.sliderPrice)
-          $('#edit-service-img-alt').val(service.imageAlt)
+          const service = response.data;
+          $('#edit-service-id').val(service.id);
+          $('#edit-service-title').val(service.serviceTitleText);
+          $('#edit-service-root-name').val(service.rootName);
+          $('#edit-service-max-value').val(service.maxValue);
+          $('#edit-service-slider-price').val(service.sliderPrice);
+          $('#edit-service-img-alt').val(service.imageAlt);
 
           if (service.imageUrl) {
-            $('#edit-service-image').data(
-              'existing-image-url',
-              service.imageUrl
-            )
+            $('#edit-service-image').data('existing-image-url', service.imageUrl);
           }
-          $('#edit-service-container').show()
+          $('#edit-service-container').show();
         } else {
-          alert('Error: ' + response.data)
+          alert('Error: ' + response.data);
         }
       },
       error: function (error) {
-        console.log('Error: ', error)
+        console.log('Error: ', error);
       },
-    })
-  })
+    });
+  });
 
-  loadServices()
-})
+  loadServices();
+});

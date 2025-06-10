@@ -97,6 +97,7 @@ export const discountCodes = [
     discountCode: 'springcleaning24',
     discountValue: 0.2,
   },
+  { discountCode: 'summercleaning24', discountValue: 0.2 },
 ]
 
 export const calendlyLink =
