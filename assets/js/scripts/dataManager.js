@@ -27,8 +27,8 @@ export function getServiceData() {
 }
 
 export async function sendQuoteInfo(eventUuid, inviteeUuid) {
-  const server = 'https://api.wallwebdevelopment.com/cnpserver/api/'
-  const apiRoute = '/api'
+  const server = 'https://api.wallwebdevelopment.com/cnpserver/'
+  const apiRoute = 'api'
 
   const getValue = (id) =>
     parseFloat(document.getElementById(id).textContent.replace('$', ''))
